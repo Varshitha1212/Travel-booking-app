@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Travel Options{% endblock %}
+{% block content %}
+<section class="hero mb-4">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-6">
+      <h1 class="display-5 fw-bold">Create Your Amazing Trip</h1>
+      <p class="text-muted">Find flights, trains, and buses worldwide. Book in seconds with a delightful, modern interface.</p>
+      <div class="d-flex gap-2">
+        <a class="btn btn-primary" href="#filters">Browse Options</a>
+        <a class="btn btn-success" href="{% url 'signup' %}">Get Started</a>
+      </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block">
+      <img class="img-fluid rounded" src="https://images.unsplash.com/photo-1502920917128-1aa500764ce7?q=80&w=1200&auto=format&fit=crop" alt="Travel collage"/>
+    </div>
+  </div>
+  </section>
+
+<h2 id="filters" class="mb-3">Travel Options</h2>
+
+<form class="row g-2 mb-3">
+  <div class="col-md-2">
+    <select class="form-select" name="type">
+      <option value="">Any</option>
+      <option {% if request.GET.type == 'FLIGHT' %}selected{% endif %}>FLIGHT</option>
+      <option {% if request.GET.type == 'TRAIN' %}selected{% endif %}>TRAIN</option>
+      <option {% if request.GET.type == 'BUS' %}selected{% endif %}>BUS</option>
+    </select>
+  </div>
+  <div class="col-md-3"><input id="sourceInput" class="form-control" name="source" placeholder="Source" value="{{ request.GET.source }}"></div>
+  <div class="col-md-3"><input id="destInput" class="form-control" name="destination" placeholder="Destination" value="{{ request.GET.destination }}"></div>
+  <div class="col-md-2"><input class="form-control" type="date" name="date" value="{{ request.GET.date }}"></div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Filter</button></div>
+  <div class="col-12 small text-muted">Tip: use filters to narrow results</div>
+  </form>
+
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0 align-middle">
+  <thead><tr><th>Type</th><th>Route</th><th>Departure</th><th>Price</th><th>Seats</th><th></th></tr></thead>
+  <tbody>
+  {% for o in options %}
+    <tr>
+      <td>{{ o.get_type_display }}</td>
+      <td>{{ o.source }} → {{ o.destination }}</td>
+      <td>{{ o.departure_time }}</td>
+      <td>${{ o.price }}</td>
+      <td>{{ o.available_seats }}</td>
+      <td><a class="btn btn-sm btn-success" href="{% url 'book_option' o.pk %}">Book</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6" class="text-center">No options found.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div></div>
+<script src="/static/js/cities.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function(){
+    if (window.TravelAutocomplete) {
+      window.TravelAutocomplete.setupAutocomplete('sourceInput');
+      window.TravelAutocomplete.setupAutocomplete('destInput');
+    }
+  });
+</script>
+{% endblock %}
+
+

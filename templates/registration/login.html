@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card overflow-hidden">
+      <div class="row g-0">
+        <div class="col-md-6 p-4">
+          <h1 class="h3 mb-3">Welcome back</h1>
+          {% if form.errors %}
+            <div class="alert alert-danger">Please correct the errors below.</div>
+          {% endif %}
+          <form method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary w-100" type="submit">Sign in</button>
+          </form>
+          <p class="mt-3">No account? <a href="{% url 'signup' %}">Sign up</a></p>
+        </div>
+        <div class="col-md-6 d-none d-md-block" style="background:linear-gradient(135deg,#f9a8d4,#93c5fd);">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

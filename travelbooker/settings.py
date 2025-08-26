@@ -23,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+d3=d&5s_79p$ufh)2uxsry6^)7a=)jx+b@f&083+3126%ef36'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-+d3=d&5s_79p$ufh)2uxsry6^)7a=)jx+b@f&083+3126%ef36')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
+_hosts = os.getenv('ALLOWED_HOSTS', '').strip()
+ALLOWED_HOSTS = [h for h in _hosts.split(',') if h] if _hosts else []
 
 
 # Application definition
@@ -136,6 +137,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Auth redirects
 LOGIN_REDIRECT_URL = 'list_options'
